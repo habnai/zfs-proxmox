@@ -1,0 +1,4 @@
+[ansible]
+localhost	ansible_connection=local
+[homesrv]
+10.11.20.20:19811      ansible_connection=ssh  ansible_user=habnai

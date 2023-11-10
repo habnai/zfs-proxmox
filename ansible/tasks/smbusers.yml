@@ -1,13 +1,17 @@
-- name: Check existence of smb user {{item.name}}
-  ansible.builtin.command: "pdbedit -u {{item.name}}"
+- name: Check existence of smb user {{ item.name }}
+  ansible.builtin.command: "pdbedit -u {{ item.name }}"
   register: userstat
-  failed_when: "userstat.rc not in [ 0, 254 ]"
+  failed_when: "userstat.rc == 256"
   changed_when: false
 
-- name: Create samba user {{item.name}}
-  shell: "(echo {{ item['smbpasswd'] }}; echo {{ item['smbpasswd'] }}) | smbpasswd -s -a {{ item['name'] }}"
-  when: userstat.rc == 255
+- name: Create samba user {{ item.name }}
+  ansible.builtin.expect:
+    command: "smbpasswd -s -a {{ item.name }}"
+    responses:
+      "New SMB password:": "{{ item.smbpasswd }}"
+      "Retype new SMB password:": "{{ item.smbpasswd }}"
+  when: userstat.rc == 256
 
-- name: Enable samba user {{item.name}}
-  shell: "smbpasswd -e {{ item['name'] }}"
+- name: Enable samba user {{ item.name }}
+  ansible.builtin.command: "smbpasswd -e {{ item.name }}"
   when: userstat.rc == 0

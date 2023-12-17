@@ -43,3 +43,4 @@
     mode: u=rwx,g=rwx,o=x,g+s
   with_items:
     - "{{shared_folders}}"
+

@@ -7,7 +7,7 @@ A full server for your home using ZFS, files &amp; Ansible for setup.
 
 sudo apt install git ansible
 
-git clone <https://github.com/habnai/zfs-homeserver.git>
+git clone <https://github.com/habnai/zfs-proxmox.git>
 
 cd zfs-homeserver/ansible
 

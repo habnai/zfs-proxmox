@@ -10,6 +10,7 @@ zfs:
     CACHEDISK: "/dev/disk/by-id/scsi-424242ababab",
     poolName2: VMPool,
     DISK5: "/dev/disk/by-id/ata-VBOX_HARDDISK_VB0560a824-8f3254f9",
+    DISK6: "/dev/disk/by-id/ata-VBOX_HARDDISK_VB0560a824-8f3254f9"
   }
 
 usergroups:

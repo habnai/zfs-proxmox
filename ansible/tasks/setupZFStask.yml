@@ -7,22 +7,25 @@
     state: latest
     cache_valid_time: 36000
 
-# Gather space usage about all imported ZFS pools
-- zpool_facts: properties='free,size'
+- name: Gather space usage about all imported ZFS pools
+  zpool_facts:
+    properties: 'free,size'
 
-- debug: msg='ZFS pool {{ item.name }} exists? -> [{{ item.name == zfs.poolName }}] It has {{ item.free }} free space out of {{ item.size }}.'
+- debug:
+    msg: "ZFS pool {{ item.name }} exists? -> [{{ item.name == zfs.poolName }}] It has {{ item.free }} free space out of {{ item.size }}."
   with_items: "{{ ansible_zfs_pools }}"
 
-- name: Create zsh pool '{{zfs.poolName}}' with 3disks
-  shell: "zpool create -f -o ashift=12 {{zfs.poolName}} raidz1 {{zfs.DISK1}} {{zfs.DISK2}} {{zfs.DISK3}}"
-  when: "not (ansible_zfs_pools|length > 0 and ansible_zfs_pools[0].name == zfs.poolName)"
+- name: Create zsh pool '{{ zfs.poolName }}' with 3 disks
+  shell: "zpool create -f -o ashift=12 {{ zfs.poolName }} raidz1 {{ zfs.DISK1 }} {{ zfs.DISK2 }} {{ zfs.DISK3 }}"
+  when: "(ansible_zfs_pools | selectattr('name', 'equalto', zfs.poolName) | list | length) == 0"
 
-- debug: msg='ZFS pool {{ item.name }} exists? -> [{{ item.name == zfs.poolName2 }}] It has {{ item.free }} free space out of {{ item.size }}.'
+- debug:
+    msg: "ZFS pool {{ item.name }} exists? -> [{{ item.name == zfs.poolName2 }}] It has {{ item.free }} free space out of {{ item.size }}."
   with_items: "{{ ansible_zfs_pools }}"
 
-- name: Create zsh pool '{{zfs.poolName2}}' with 2 disks
-  shell: 'zpool create -o ashift=12 {{zfs.poolName2}} mirror {{zfs.DISK4}} {{zfs.DISK5}}'
-  when: 'not (ansible_zfs_pools|length > 0 and ansible_zfs_pools[0].name == zfs.poolName)'
+- name: Create zsh pool '{{ zfs.poolName2 }}' with 2 disks
+  shell: "zpool create -o ashift=12 {{ zfs.poolName2 }} mirror {{ zfs.DISK4 }} {{ zfs.DISK5 }}"
+  when: "(ansible_zfs_pools | selectattr('name', 'equalto', zfs.poolName2) | list | length) == 0"
 
 - name: Create file system for personal files
   zfs:

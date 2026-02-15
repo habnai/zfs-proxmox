@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Pool with the data that needs a backup
-MASTERPOOL="dataPool"
+MASTERPOOL="DataPool"
 
 # Backup-Pools
 BACKUPPOOLS=("backupPool1")
